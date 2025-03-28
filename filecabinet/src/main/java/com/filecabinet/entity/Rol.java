@@ -1,9 +1,5 @@
 package com.filecabinet.entity;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.List;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,15 +10,11 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class Factura {
+public class Rol {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Cliente cliente;
-    private LocalDate fechaEmision;
-    private BigDecimal total;
-    private String estado;
-    private List<ItemTransaccion> items; 
+    private String rol;
     
 }
