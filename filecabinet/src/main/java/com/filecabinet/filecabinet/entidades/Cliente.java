@@ -15,6 +15,8 @@ public class Cliente {
     private Long id;
     private String nombre;
     @Column(unique = true)
+    private String apellidos;
+    @Column(unique = true)
     private String cifNif;
     private String direccion;
     private String ciudad;

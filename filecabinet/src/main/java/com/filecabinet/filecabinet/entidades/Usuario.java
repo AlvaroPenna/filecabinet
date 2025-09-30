@@ -17,10 +17,10 @@ public class Usuario {
     private String nombre;
     @Column(nullable = true)
     private String apellidos;
-    private Integer telefono;
+    private String telefono;
     private String email;
     private String domicilio;
-    private Integer codigoPostal;
+    private String codigoPostal;
     private String provincia;
     private String poblacion;
     private String passwordHash;

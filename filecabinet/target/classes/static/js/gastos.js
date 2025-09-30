@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Función para cargar los clientes desde la API
-    /*function cargarClientes() {
+    function cargarClientes() {
         fetch('http://localhost:8080/api/clientes')
             .then(response => {
                 if (!response.ok) {
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 clientes.forEach(cliente => {
                     const option = document.createElement('option');
                     option.value = cliente.id;
-                    option.textContent = cliente.nombre;
+                    option.textContent = cliente.cifNif + "-" + cliente.nombre + " " + cliente.apellidos;
                     selectCliente.appendChild(option);
                 });
             })
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
     
-    cargarClientes();*/
+    cargarClientes();
 
     // Manejo del formulario
     document.getElementById('gasto-form').addEventListener('submit', function(event) {
