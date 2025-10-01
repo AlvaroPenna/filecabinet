@@ -28,7 +28,7 @@ public class AuthController {
      * @param loginRequest DTO con username y password.
      * @return ResponseEntity con el token o un error 401.
      */
-    @PostMapping("/login") // Ruta completa: /api/auth/login
+    /*@PostMapping("/login") // Ruta completa: /api/auth/login
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
         // La lógica real de autenticación se delega al servicio
         try {
@@ -46,5 +46,5 @@ public class AuthController {
                 new LoginResponse(null, "Credenciales inválidas: " + ex.getMessage())
             );
         }
-    }
+    }*/
 }

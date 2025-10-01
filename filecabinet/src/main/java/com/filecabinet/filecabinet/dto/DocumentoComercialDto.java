@@ -12,6 +12,7 @@ import lombok.Data;
 
 @Data
 public abstract class DocumentoComercialDto {
+    private Long id;
     @NotBlank(message = "El número del documento no puede estar vacío")
     @Size(min = 1, max = 50, message = "El número del documento debe tener entre 1 y 50 caracteres")
     private String numero;

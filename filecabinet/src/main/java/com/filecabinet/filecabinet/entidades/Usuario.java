@@ -24,6 +24,7 @@ public class Usuario {
     private String provincia;
     private String poblacion;
     private String passwordHash;
+    @Column(nullable = true)
     private Date fechaRegistro;
     private boolean activo;
 
