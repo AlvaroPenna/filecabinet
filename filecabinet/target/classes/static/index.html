@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Acceso al Sistema</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css\index.css">
+    <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
     <div class="container">
@@ -41,32 +41,7 @@
 
     </div>
 
-    <script src="js\gastos.js"></script>
-
-    <script>
-        // Función de ejemplo para manejar el envío del formulario
-        function handleLogin(event) {
-            event.preventDefault(); // Detiene el envío real del formulario
-
-            const username = document.getElementById('username').value;
-            const messageBox = document.getElementById('messageBox');
-            
-            // Simulación de validación
-            if (username.length < 3) {
-                messageBox.style.color = '#e74c3c';
-                messageBox.innerHTML = 'Error: Usuario o contraseña incorrectos.';
-            } else {
-                messageBox.style.color = '#27ae60';
-                messageBox.innerHTML = '¡Acceso simulado exitoso! Redirigiendo...';
-                // En una aplicación real, se haría una petición AJAX/Fetch a tu backend aquí.
-            }
-            
-            // Ocultar mensaje después de 3 segundos
-            setTimeout(() => {
-                messageBox.innerHTML = '';
-            }, 3000);
-        }
-    </script>
+    <script src="js\index.js"></script>
 
 </body>
 </html>
