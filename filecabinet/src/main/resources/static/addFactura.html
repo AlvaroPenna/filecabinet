@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/addFactura.css">
+    <title>Ingreso de Nueva Factura</title>
+</head>
+<body>
+
+<div class="container">
+    <h2>Ingreso de Nueva Factura</h2>
+
+    <form id="facturaForm">
+        
+        <!-- ENCABEZADO DE FACTURA (FacturaDto) -->
+        <div class="form-group">
+            <label for="numero">Número de Factura:</label>
+            <input type="text" id="numero" name="numero" required>
+        </div>
+
+        <div class="form-group">
+            <label for="fechaEmision">Fecha de Emisión:</label>
+            <input type="date" id="fechaEmision" name="fechaEmision" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="cliente">Nombre del Cliente:</label>
+            <input type="text" id="cliente" name="cliente" required>
+        </div>
+
+        <!-- SECCIÓN DE DETALLES (DetalleDocumentoDto) -->
+        <fieldset class="form-group" style="border: none; padding: 0; margin-bottom: 0;">
+            <legend style="font-weight: 600; color: #2c3e50; margin-bottom: 15px;">Detalles / Líneas de Factura</legend>
+            <div id="detallesContainer">
+                <!-- Nota: Esta nota será eliminada en los clones por JS -->
+                <p id="detalle-note" style="font-size: 0.9em; color: #7f8c8d; margin-bottom: 15px;">
+                    *Nota: Esta sección ahora es dinámica. Se enviarán todos los detalles agregados.
+                </p>
+                
+                <!-- PLANTILLA DEL PRIMER DETALLE -->
+                <div class="detalle-item" data-index="1">
+                    <div class="form-group">
+                        <label for="descripcion-1">Descripción de Detalle:</label>
+                        <input type="text" id="descripcion-1" name="detalle-descripcion-1" value="Servicio de Consultoría">
+                    </div>
+                    <div class="form-group">
+                        <label for="cantidad-1">Cantidad:</label>
+                        <input type="number" id="cantidad-1" name="detalle-cantidad-1" value="1" min="1">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="precioUnitario-1">Precio Unitario:</label>
+                        <input type="number" id="precioUnitario-1" name="detalle-precioUnitario-1" step="0.01" value="150.00">
+                    </div>
+                    <!-- El botón de eliminar se añade solo a los clones por JS -->
+                </div>
+            </div>
+        </fieldset>
+        
+        <!-- NUEVO BOTÓN PARA AÑADIR DETALLES -->
+        <button type="button" class="btn-secondary" id="btnAddDetail">Añadir Detalle</button>
+
+        <div class="form-group">
+            <label for="total">Total Factura:</label>
+            <input type="number" id="total" name="total" step="0.01">
+        </div>
+
+        <button type="submit" class="btn-submit">Crear Factura</button>
+    </form>
+
+    <div id="message"></div>
+</div>
+     <script src="js\addFactura.js"></script>
+</body>
+</html>
