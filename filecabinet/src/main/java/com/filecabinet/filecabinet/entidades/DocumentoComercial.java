@@ -25,11 +25,10 @@ public abstract class DocumentoComercial {
     @JoinColumn(name = "cliente_id", nullable = true)
     protected Cliente cliente;
 
-    private String numero;
     private Date fechaEmision;
-    private BigDecimal precio_sin_iva;
-    private BigDecimal precio_iva;
-    private BigDecimal precio_con_iva;
+    private BigDecimal total_sin_iva;
+    private BigDecimal total_iva;
+    private BigDecimal total_con_iva;
     @Column( nullable = true)
     private String descripcion;
 

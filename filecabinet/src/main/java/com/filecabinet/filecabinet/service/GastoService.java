@@ -41,11 +41,11 @@ public class GastoService {
     @Transactional
     public Optional<GastoDto> updateGasto(Long id, GastoDto gastoDetails) {
         return gastosRepository.findById(id).map(gasto -> {
-            gasto.setNumero(gastoDetails.getNumero());
+            gasto.setNumGasto(gastoDetails.getNumGasto());
             gasto.setFechaEmision(gastoDetails.getFechaEmision());
-            gasto.setPrecio_sin_iva(gastoDetails.getPrecio_sin_iva());
-            gasto.setPrecio_iva(gastoDetails.getPrecio_iva());
-            gasto.setPrecio_con_iva(gastoDetails.getPrecio_con_iva());
+            gasto.setTotal_sin_iva(gastoDetails.getTotal_sin_iva());
+            gasto.setTotal_iva(gastoDetails.getTotal_iva());
+            gasto.setTotal_con_iva(gastoDetails.getTotal_con_iva());
             gasto.setDescripcion(gastoDetails.getDescripcion());
             gasto.setProveedor(gastoDetails.getProveedor());
             gasto.setObra(gastoDetails.getObra());
@@ -65,11 +65,11 @@ public class GastoService {
     // Métodos de conversión
     private Gasto toEntity(GastoDto dto) {
         Gasto entity = new Gasto();
-        entity.setNumero(dto.getNumero());
+        entity.setNumGasto(dto.getNumGasto());;
         entity.setFechaEmision(dto.getFechaEmision());
-        entity.setPrecio_sin_iva(dto.getPrecio_sin_iva());
-        entity.setPrecio_iva(dto.getPrecio_iva());
-        entity.setPrecio_con_iva(dto.getPrecio_con_iva());
+        entity.setTotal_sin_iva(dto.getTotal_sin_iva());
+        entity.setTotal_iva(dto.getTotal_iva());
+        entity.setTotal_con_iva(dto.getTotal_con_iva());
         entity.setDescripcion(dto.getDescripcion());
         entity.setProveedor(dto.getProveedor());
         entity.setObra(dto.getObra());
@@ -78,11 +78,11 @@ public class GastoService {
 
     private GastoDto toDto(Gasto entity) {
         GastoDto dto = new GastoDto();
-        dto.setNumero(entity.getNumero());
+        dto.setNumGasto(entity.getNumGasto());
         dto.setFechaEmision(entity.getFechaEmision());
-        dto.setPrecio_sin_iva(entity.getPrecio_sin_iva());
-        dto.setPrecio_iva(entity.getPrecio_iva());
-        dto.setPrecio_con_iva(entity.getPrecio_con_iva());
+        dto.setTotal_sin_iva(entity.getTotal_sin_iva());
+        dto.setTotal_iva(entity.getTotal_iva());
+        dto.setTotal_con_iva(entity.getTotal_con_iva());
         dto.setDescripcion(entity.getDescripcion());
         dto.setProveedor(entity.getProveedor());
         dto.setObra(entity.getObra());

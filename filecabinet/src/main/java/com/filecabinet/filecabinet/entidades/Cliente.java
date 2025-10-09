@@ -4,9 +4,13 @@ import java.util.Set;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Entity
 @Data
+@EqualsAndHashCode(exclude = {"facturas", "presupuestos"})
+@ToString(exclude = {"facturas", "presupuestos"})
 @Table(name = "clientes")
 public class Cliente {
 

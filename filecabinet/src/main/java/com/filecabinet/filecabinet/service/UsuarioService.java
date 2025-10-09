@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,11 +16,11 @@ import com.filecabinet.filecabinet.repository.UsuarioRepository;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
-    private final PasswordEncoder passwordEncoder;
+    //private final PasswordEncoder passwordEncoder;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder){
+    public UsuarioService(UsuarioRepository usuarioRepository /*, PasswordEncoder passwordEncoder */){
         this.usuarioRepository = usuarioRepository;
-        this.passwordEncoder = passwordEncoder;
+        //this.passwordEncoder = passwordEncoder;
     }
     
     @Transactional(readOnly = true)
@@ -80,10 +80,11 @@ public class UsuarioService {
         entity.setCodigoPostal(dto.getCodigoPostal());
         entity.setProvincia(dto.getProvincia());
         entity.setPoblacion(dto.getPoblacion());
+        entity.setPasswordHash(dto.getContraseña());
         //Contraseña encriptada
-        String newpassword = dto.getContraseña();
-        String encodePassword = passwordEncoder.encode(newpassword);
-        entity.setPasswordHash(encodePassword);
+        //String newpassword = dto.getContraseña();
+        //String encodePassword = passwordEncoder.encode(newpassword);
+        //entity.setPasswordHash(encodePassword);
         entity.setActivo(dto.isActivo());
         return entity;
     }
@@ -104,6 +105,10 @@ public class UsuarioService {
         dto.setActivo(usuario.isActivo());
         return dto;
     }
-    
+
+    @Transactional(readOnly = true)
+    public Usuario usuarioById(Long id){
+        return usuarioRepository.findById(id).orElse(null);
+    }
 
 }

@@ -96,4 +96,10 @@ public class ClienteService {
         dto.setTelefono(cliente.getTelefono());
         return dto;
     }
+
+    @Transactional(readOnly = true)
+    public Cliente clienteById(Long id){
+        return clienteRepository.findById(id).orElse(null);
+    }
+
 }

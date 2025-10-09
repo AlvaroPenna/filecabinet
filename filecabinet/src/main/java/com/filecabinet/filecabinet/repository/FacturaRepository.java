@@ -1,14 +1,12 @@
 package com.filecabinet.filecabinet.repository;
 
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.filecabinet.filecabinet.entidades.Usuario;
+import com.filecabinet.filecabinet.entidades.Factura;
 
 @Repository
-public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
+public interface FacturaRepository extends JpaRepository<Factura, Long>{
 
-    Usuario findByEmail(String email);
-    
+
 }

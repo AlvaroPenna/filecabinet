@@ -9,7 +9,11 @@ import lombok.Setter;
 @Setter
 public class Gasto extends DocumentoComercial {
 
+    @Column(unique = true)
+    private String numGasto;
+
     private String proveedor;
+    
     @Column(nullable = true)
     private String obra;
 }
