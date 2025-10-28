@@ -46,7 +46,6 @@ public class GastoService {
             gasto.setTotal_sin_iva(gastoDetails.getTotal_sin_iva());
             gasto.setTotal_iva(gastoDetails.getTotal_iva());
             gasto.setTotal_con_iva(gastoDetails.getTotal_con_iva());
-            gasto.setDescripcion(gastoDetails.getDescripcion());
             gasto.setProveedor(gastoDetails.getProveedor());
             gasto.setObra(gastoDetails.getObra());
             return toDto(gastosRepository.save(gasto));
@@ -70,7 +69,6 @@ public class GastoService {
         entity.setTotal_sin_iva(dto.getTotal_sin_iva());
         entity.setTotal_iva(dto.getTotal_iva());
         entity.setTotal_con_iva(dto.getTotal_con_iva());
-        entity.setDescripcion(dto.getDescripcion());
         entity.setProveedor(dto.getProveedor());
         entity.setObra(dto.getObra());
         return entity;
@@ -83,7 +81,6 @@ public class GastoService {
         dto.setTotal_sin_iva(entity.getTotal_sin_iva());
         dto.setTotal_iva(entity.getTotal_iva());
         dto.setTotal_con_iva(entity.getTotal_con_iva());
-        dto.setDescripcion(entity.getDescripcion());
         dto.setProveedor(entity.getProveedor());
         dto.setObra(entity.getObra());
         return dto;

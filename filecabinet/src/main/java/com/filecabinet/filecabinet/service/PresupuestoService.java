@@ -44,7 +44,7 @@ public class PresupuestoService {
     @Transactional
     public PresupuestoDto createPresupuesto(PresupuestoDto presupuestoDto){
         Presupuesto presupuesto = toEntity(presupuestoDto);
-        Long usuario_id =presupuestoDto.getUsuario_id();
+        Long usuario_id = presupuestoDto.getUsuario_id(); 
         Usuario usuario = usuarioService.usuarioById(usuario_id);
         presupuesto.setUsuario(usuario);
 
@@ -59,6 +59,8 @@ public class PresupuestoService {
         return toDto(savedPresupuesto);
     }
 
+    //Mirar Funcion de updatePresupuesto y deletePresupuesto, porque se tendría que modificar tambien los detalles.
+
     @Transactional
     public Optional<PresupuestoDto> updatePresupuesto(Long id, PresupuestoDto presupuestoDetails){
         return presupuestoRepository.findById(id).map(presupuesto -> {
@@ -69,7 +71,6 @@ public class PresupuestoService {
             presupuesto.setTotal_sin_iva(presupuestoDetails.getTotal_sin_iva());
             presupuesto.setTotal_iva(presupuestoDetails.getTotal_iva());
             presupuesto.setTotal_con_iva(presupuestoDetails.getTotal_con_iva());
-            presupuesto.setDescripcion(presupuestoDetails.getDescripcion());
             return toDto(presupuestoRepository.save(presupuesto));
         });
     }
@@ -92,7 +93,6 @@ public class PresupuestoService {
         entity.setTotal_sin_iva(dto.getTotal_sin_iva());
         entity.setTotal_iva(dto.getTotal_iva());
         entity.setTotal_con_iva(dto.getTotal_con_iva());
-        entity.setDescripcion(dto.getDescripcion());
         return entity;
     }
 
@@ -105,7 +105,6 @@ public class PresupuestoService {
         dto.setTotal_sin_iva(entity.getTotal_sin_iva());
         dto.setTotal_iva(entity.getTotal_iva());
         dto.setTotal_con_iva(entity.getTotal_con_iva());
-        dto.setDescripcion(entity.getDescripcion());
 
         if(entity.getDetalles() != null){
             List<DetalleDocumentoDto> detallesDto = entity.getDetalles().stream()
@@ -125,6 +124,7 @@ public class PresupuestoService {
             entity.setId(dto.getId()); 
         }
         entity.setTrabajo(dto.getTrabajo());
+        entity.setDescripcion(dto.getDescripcion());
         entity.setCantidad(dto.getCantidad());
         entity.setPrecio(dto.getPrecio());
         return entity;
@@ -134,6 +134,7 @@ public class PresupuestoService {
         DetalleDocumentoDto dto = new DetalleDocumentoDto();
         dto.setId(entity.getId());
         dto.setTrabajo(entity.getTrabajo());
+        dto.setDescripcion(entity.getDescripcion());
         dto.setCantidad(entity.getCantidad());
         dto.setPrecio(entity.getPrecio());
         return dto;
@@ -176,6 +177,7 @@ public class PresupuestoService {
             DetalleDocumento detalle = detalleOptional.get();
 
             detalle.setTrabajo(detalleDto.getTrabajo());
+            detalle.setDescripcion(detalleDto.getDescripcion());
             detalle.setCantidad(detalleDto.getCantidad());
             detalle.setPrecio(detalleDto.getPrecio());
             Presupuesto updatedPresupuesto = presupuestoRepository.save(presupuesto);

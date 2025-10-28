@@ -29,7 +29,5 @@ public abstract class DocumentoComercial {
     private BigDecimal total_sin_iva;
     private BigDecimal total_iva;
     private BigDecimal total_con_iva;
-    @Column( nullable = true)
-    private String descripcion;
 
 }

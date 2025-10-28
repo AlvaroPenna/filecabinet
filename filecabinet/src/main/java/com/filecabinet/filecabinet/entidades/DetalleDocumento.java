@@ -21,8 +21,8 @@ public class DetalleDocumento{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String trabajo;
+    private String descripcion;
     private Double cantidad;
-    //Precio sin iva.
     private Double precio;
 
     @ManyToOne(fetch = FetchType.LAZY)

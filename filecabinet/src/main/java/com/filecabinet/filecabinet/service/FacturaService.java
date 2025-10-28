@@ -23,7 +23,7 @@ public class FacturaService {
     private final ClienteService clienteService;
     private final UsuarioService usuarioService;
 
-    public FacturaService(FacturaRepository facturaRespository, ClienteService clienteService, UsuarioService usuarioService){
+    public FacturaService(FacturaRepository facturaRespository, ClienteService clienteService,UsuarioService usuarioService){
         this.facturaRepository = facturaRespository;
         this.clienteService = clienteService;
         this.usuarioService = usuarioService;
@@ -70,7 +70,30 @@ public class FacturaService {
             factura.setTotal_sin_iva(facturaDetails.getTotal_sin_iva());
             factura.setTotal_iva(facturaDetails.getTotal_iva());
             factura.setTotal_con_iva(facturaDetails.getTotal_con_iva());
-            factura.setDescripcion(facturaDetails.getDescripcion());
+            List <DetalleDocumentoDto> detallesDto = facturaDetails.getDetalles();
+            if(detallesDto != null){
+                List<DetalleDocumento> detallesExistentes = factura.getDetalles();
+                for(DetalleDocumentoDto detalleDto : detallesDto){
+                    Long detalleid = detalleDto.getId();
+                    if(detalleid != null){
+                        Optional<DetalleDocumento> detalleOptional = detallesExistentes.stream()
+                        .filter(d -> d.getId() != null && d.getId().equals(detalleid))
+                        .findFirst();
+                        
+                        if(detalleOptional.isPresent()){
+                            DetalleDocumento detalle = detalleOptional.get();
+                            detalle.setTrabajo(detalleDto.getTrabajo());
+                            detalle.setDescripcion(detalleDto.getDescripcion());
+                            detalle.setCantidad(detalleDto.getCantidad());
+                            detalle.setPrecio(detalleDto.getPrecio());
+                        } else {
+                            throw new RuntimeException("Detalle con ID " + detalleid + " no encontrado en Factura " + id);
+                        }
+                        factura.setDetalles(detallesExistentes);
+                    }
+                }
+            }
+            
             return toDto(facturaRepository.save(factura));
         });
     }
@@ -93,7 +116,6 @@ public class FacturaService {
         entity.setTotal_sin_iva(dto.getTotal_sin_iva());
         entity.setTotal_iva(dto.getTotal_iva());
         entity.setTotal_con_iva(dto.getTotal_con_iva());
-        entity.setDescripcion(dto.getDescripcion());
         return entity;
     }
 
@@ -106,7 +128,6 @@ public class FacturaService {
         dto.setTotal_sin_iva(entity.getTotal_sin_iva());
         dto.setTotal_iva(entity.getTotal_iva());
         dto.setTotal_con_iva(entity.getTotal_con_iva());
-        dto.setDescripcion(entity.getDescripcion());
 
         if(entity.getDetalles() != null){
             List<DetalleDocumentoDto> detallesDto = entity.getDetalles().stream()
@@ -126,6 +147,7 @@ public class FacturaService {
             entity.setId(dto.getId()); 
         }
         entity.setTrabajo(dto.getTrabajo());
+        entity.setDescripcion(dto.getDescripcion());
         entity.setCantidad(dto.getCantidad());
         entity.setPrecio(dto.getPrecio());
         return entity;
@@ -135,71 +157,24 @@ public class FacturaService {
         DetalleDocumentoDto dto = new DetalleDocumentoDto();
         dto.setId(entity.getId());
         dto.setTrabajo(entity.getTrabajo());
+        dto.setDescripcion(entity.getDescripcion());
         dto.setCantidad(entity.getCantidad());
         dto.setPrecio(entity.getPrecio());
         return dto;
     }
 
-        private List<DetalleDocumento> mapDetallesToEntity(List<DetalleDocumentoDto> dtos, Factura factura) {
-            if (dtos == null) {
-                return new ArrayList<>(); 
-            }
+    private List<DetalleDocumento> mapDetallesToEntity(List<DetalleDocumentoDto> dtos, Factura factura) {
+        if (dtos == null) {
+            return new ArrayList<>(); 
+        }
     
         return dtos.stream()
-                .map(dto -> {
-                    DetalleDocumento entity = toDetalleEntity(dto);
-                    entity.setDocumentoComercial(factura); 
-                    return entity;
-                })
-                .collect(Collectors.toList()); 
-        }
+            .map(dto -> {
+                DetalleDocumento entity = toDetalleEntity(dto);
+                entity.setDocumentoComercial(factura); 
+                return entity;
+            }).collect(Collectors.toList()); 
+    }
     
-    @Transactional
-    public Optional<FacturaDto> addDetalle(Long facturaId, DetalleDocumentoDto detalleDto) {
-        return facturaRepository.findById(facturaId).map(factura -> {
-        DetalleDocumento nuevoDetalle = toDetalleEntity(detalleDto);
-        nuevoDetalle.setDocumentoComercial(factura); 
-        factura.getDetalles().add(nuevoDetalle);
-        Factura updatedFactura = facturaRepository.save(factura);
-        return toDto(updatedFactura);
-        });
-    }
-
-    @Transactional
-    public Optional<FacturaDto> updateDetalle(Long facturaId, Long detalleId, DetalleDocumentoDto detalleDto) {
-    return facturaRepository.findById(facturaId).map(factura -> {
-        
-        Optional<DetalleDocumento> detalleOptional = factura.getDetalles().stream()
-            .filter(d -> d.getId() != null && d.getId().equals(detalleId))
-            .findFirst();
-
-        if (detalleOptional.isPresent()) {
-            DetalleDocumento detalle = detalleOptional.get();
-
-            detalle.setTrabajo(detalleDto.getTrabajo());
-            detalle.setCantidad(detalleDto.getCantidad());
-            detalle.setPrecio(detalleDto.getPrecio());
-            Factura updatedFactura = facturaRepository.save(factura);
-            return toDto(updatedFactura);
-        } else {
-            throw new RuntimeException("Detalle con ID " + detalleId + " no encontrado en Factura " + facturaId);
-        }
-        });
-    }
-
-    @Transactional
-    public boolean deleteDetalle(Long facturaId, Long detalleId) {
-        return facturaRepository.findById(facturaId).map(factura -> {
-            Optional<DetalleDocumento> detalleOptional = factura.getDetalles().stream()
-                .filter(d -> d.getId() != null && d.getId().equals(detalleId))
-                .findFirst();
-            if (detalleOptional.isPresent()) {
-                factura.getDetalles().remove(detalleOptional.get());
-                facturaRepository.save(factura);
-                return true;
-            }
-            return false;
-        }).orElse(false);
-    }
 
 }
