@@ -2,7 +2,9 @@ package com.filecabinet.filecabinet.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -59,8 +61,6 @@ public class PresupuestoService {
         return toDto(savedPresupuesto);
     }
 
-    //Mirar Funcion de updatePresupuesto y deletePresupuesto, porque se tendría que modificar tambien los detalles.
-
     @Transactional
     public Optional<PresupuestoDto> updatePresupuesto(Long id, PresupuestoDto presupuestoDetails){
         return presupuestoRepository.findById(id).map(presupuesto -> {
@@ -71,6 +71,29 @@ public class PresupuestoService {
             presupuesto.setTotal_sin_iva(presupuestoDetails.getTotal_sin_iva());
             presupuesto.setTotal_iva(presupuestoDetails.getTotal_iva());
             presupuesto.setTotal_con_iva(presupuestoDetails.getTotal_con_iva());
+
+            List<DetalleDocumentoDto> detallesDto = presupuestoDetails.getDetalles();
+            if (detallesDto != null && !detallesDto.isEmpty()) {
+            Map<Long, DetalleDocumento> detallesExistentesMap = presupuesto.getDetalles().stream()
+                .filter(d -> d.getId() != null)
+                .collect(Collectors.toMap(DetalleDocumento::getId, Function.identity()));
+
+            for (DetalleDocumentoDto detalleDto : detallesDto) {
+                Long detalleId = detalleDto.getId();
+                if (detalleId != null) {
+                    DetalleDocumento detalle = detallesExistentesMap.get(detalleId);
+
+                    if (detalle != null) {
+                        detalle.setTrabajo(detalleDto.getTrabajo());
+                        detalle.setDescripcion(detalleDto.getDescripcion());
+                        detalle.setCantidad(detalleDto.getCantidad());
+                        detalle.setPrecio(detalleDto.getPrecio());
+                    } else {
+                        throw new RuntimeException("Detalle con ID " + detalleId + " no encontrado en Presupuesto " + id);
+                    }
+                }
+            }
+        }
             return toDto(presupuestoRepository.save(presupuesto));
         });
     }
@@ -163,44 +186,6 @@ public class PresupuestoService {
         Presupuesto updatedPresupuesto = presupuestoRepository.save(presupuesto);
         return toDto(updatedPresupuesto);
         });
-    }
-
-    @Transactional
-    public Optional<PresupuestoDto> updateDetalle(Long PresupuestoId, Long detalleId, DetalleDocumentoDto detalleDto) {
-    return presupuestoRepository.findById(PresupuestoId).map(presupuesto -> {
-        
-        Optional<DetalleDocumento> detalleOptional = presupuesto.getDetalles().stream()
-            .filter(d -> d.getId() != null && d.getId().equals(detalleId))
-            .findFirst();
-
-        if (detalleOptional.isPresent()) {
-            DetalleDocumento detalle = detalleOptional.get();
-
-            detalle.setTrabajo(detalleDto.getTrabajo());
-            detalle.setDescripcion(detalleDto.getDescripcion());
-            detalle.setCantidad(detalleDto.getCantidad());
-            detalle.setPrecio(detalleDto.getPrecio());
-            Presupuesto updatedPresupuesto = presupuestoRepository.save(presupuesto);
-            return toDto(updatedPresupuesto);
-        } else {
-            throw new RuntimeException("Detalle con ID " + detalleId + " no encontrado en Factura " + PresupuestoId);
-        }
-        });
-    }
-
-    @Transactional
-    public boolean deleteDetalle(Long presupuestoId, Long detalleId) {
-        return presupuestoRepository.findById(presupuestoId).map(presupuesto -> {
-            Optional<DetalleDocumento> detalleOptional = presupuesto.getDetalles().stream()
-                .filter(d -> d.getId() != null && d.getId().equals(detalleId))
-                .findFirst();
-            if (detalleOptional.isPresent()) {
-                presupuesto.getDetalles().remove(detalleOptional.get());
-                presupuestoRepository.save(presupuesto);
-                return true;
-            }
-            return false;
-        }).orElse(false);
     }
     
 }

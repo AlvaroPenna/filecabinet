@@ -2,6 +2,7 @@ function volverAlIndex() {
         window.location.href = "/index"; 
 }
 document.addEventListener('DOMContentLoaded', () => {
+
     function cargarClientes() {
         fetch('http://localhost:8080/api/clientes')
             .then(response => {
@@ -31,50 +32,42 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
-    
-    
     cargarClientes();
-    document.getElementById('gasto-form').addEventListener('submit', function(event) {
+    document.getElementById('proyecto-form').addEventListener('submit', function(event) {
         event.preventDefault();
 
-        const proveedor = document.getElementById('proveedor').value;
-        const fechaInput = document.getElementById('fechaEmision').value;
-        const fechaEmision = new Date(fechaInput).toISOString();
-        const numero = document.getElementById('numero').value;
-        const obra = document.getElementById('obra').value;
-        const importe_sin_iva = parseFloat(document.getElementById('importe_sin_iva').value);
-        const tipo_iva = parseInt(document.querySelector('input[name="tipo_iva"]:checked').value);
+        const nombre = document.getElementById('nombre').value;
+        const direccion = document.getElementById('direccion').value;
+        const ciudad = document.getElementById('ciudad').value;
+        const codigoPostal = document.getElementById('codigoPostal').value;
+        const fechaInicio = document.getElementById('fechaInicio').value; 
+        const fechaFin = document.getElementById('fechaFin').value;
         const clienteId = document.getElementById('cliente').value;
-        
-        const ivaDecimal = tipo_iva / 100;
-        const precioIva = importe_sin_iva * ivaDecimal;
-        const precioConIva = importe_sin_iva + precioIva;
 
-        const gastoData = {
-            proveedor: proveedor,
-            fechaEmision: fechaEmision,
-            numGasto: numero,
-            obra: obra,
-            total_sin_iva: importe_sin_iva,
-            total_iva: precioIva,
-            total_con_iva: precioConIva,
+        const proyectoData = {
+            nombre: nombre,
+            direccion: direccion,
+            ciudad: ciudad,
+            codigoPostal: codigoPostal,
+            fechaInicio: fechaInicio,
+            fechaFin: fechaFin,
             cliente_id: clienteId ? parseInt(clienteId) : null
         };
         
-        fetch('http://localhost:8080/api/gastos', {
+        fetch('http://localhost:8080/api/proyectos', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(gastoData)
+            body: JSON.stringify(proyectoData)
         })
         .then(response => {
             if (response.ok) {
-                alert('¡Gasto guardado con éxito! ✅');
-                document.getElementById('gasto-form').reset();
+                alert('Proyecto guardado con éxito! ✅');
+                document.getElementById('proyecto-form').reset();
             } else {
-                alert('Error al guardar el gasto. Por favor, revisa los datos.');
-                console.error('Error al guardar el gasto:', response.statusText);
+                alert('Error al guardar el proyecto. Por favor, revisa los datos.');
+                console.error('Error al guardar el proyecto:', response.statusText);
             }
         })
         .catch(error => {

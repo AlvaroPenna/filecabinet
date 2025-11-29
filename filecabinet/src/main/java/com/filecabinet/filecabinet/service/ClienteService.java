@@ -2,7 +2,10 @@ package com.filecabinet.filecabinet.service;
 
 import com.filecabinet.filecabinet.dto.ClienteDto;
 import com.filecabinet.filecabinet.entidades.Cliente;
+import com.filecabinet.filecabinet.entidades.Usuario;
 import com.filecabinet.filecabinet.repository.ClienteRepository;
+import com.filecabinet.filecabinet.repository.UsuarioRepository;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,9 +17,11 @@ import java.util.stream.Collectors;
 public class ClienteService {
 
     private final ClienteRepository clienteRepository;
+    private final UsuarioRepository usuarioRepository;
 
-    public ClienteService(ClienteRepository clienteRepository) {
+    public ClienteService(ClienteRepository clienteRepository,UsuarioRepository usuarioRepository) {
         this.clienteRepository = clienteRepository;
+        this.usuarioRepository = usuarioRepository;
     }
 
     @Transactional(readOnly = true)
@@ -32,8 +37,12 @@ public class ClienteService {
     }
 
     @Transactional
-    public ClienteDto createCliente(ClienteDto clienteDto) {
+    public ClienteDto createCliente(ClienteDto clienteDto, Long userId) {
         Cliente cliente = toEntity(clienteDto);
+        if (userId != null){
+            Usuario usuario = usuarioRepository.findById(userId).orElse(null);
+            cliente.setUsuario(usuario);
+        }
         Cliente savedCliente = clienteRepository.save(cliente);
         return toDto(savedCliente);
     }
@@ -72,11 +81,11 @@ public class ClienteService {
         entity.setNombre(dto.getNombre());
         entity.setApellidos(dto.getApellidos());
         entity.setCifNif(dto.getCifNif());
+        entity.setEmail(dto.getEmail());
+        entity.setTelefono(dto.getTelefono());
         entity.setDireccion(dto.getDireccion());
         entity.setCiudad(dto.getCiudad());
         entity.setCodigoPostal(dto.getCodigoPostal());
-        entity.setEmail(dto.getEmail());
-        entity.setTelefono(dto.getTelefono());
         return entity;
     }
     

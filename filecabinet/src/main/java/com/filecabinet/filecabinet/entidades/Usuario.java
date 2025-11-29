@@ -28,10 +28,10 @@ public class Usuario {
     private Date fechaRegistro;
     private boolean activo;
 
-    // Relaciones
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Cliente> clientes;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<DocumentoComercial> documentos;
+    private Set<Empleado> trabajadores;
+
 }

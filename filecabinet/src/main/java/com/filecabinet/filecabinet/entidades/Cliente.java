@@ -18,7 +18,6 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nombre;
-    @Column(unique = true)
     private String apellidos;
     @Column(unique = true)
     private String cifNif;
@@ -28,7 +27,6 @@ public class Cliente {
     private String email;
     private String telefono;
 
-    // Relaciones
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
@@ -38,5 +36,8 @@ public class Cliente {
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Presupuesto> presupuestos;
+
+    @OneToMany(mappedBy = "cliente")
+    private Set<Proyecto> proyecto;
 
 }

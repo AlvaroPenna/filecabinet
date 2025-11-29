@@ -56,28 +56,35 @@ body {
             outline: none;
         }
 
-        .btn-submit {
-            width: 100%;
-            padding: 14px;
-            background-color: #4a90e2;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            letter-spacing: 0.5px;
-            transition: background-color 0.3s, transform 0.2s;
-        }
+        .form-actions {
+    display: flex; /* Habilita el diseño flexible */
+    justify-content: space-between; /* Distribuye el espacio entre los elementos */
+    gap: 10px; /* Espacio entre los botones */
+    margin-top: 20px; /* Separación de los elementos de arriba */
+}
 
-        .btn-submit:hover {
-            background-color: #357bd9;
-            transform: translateY(-2px);
-        }
+/* 2. Estilos para los botones (Modificado) */
+.btn-submit, .btn-volver {
+    /* IMPORTANTE: Quitar el width: 100%; */
+    /* width: 100%; <--- Eliminar o comentar esta línea */
+    flex-grow: 1; /* Permite que ambos botones crezcan y compartan el espacio por igual */
+    
+    padding: 14px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    transition: background-color 0.3s, transform 0.2s;
+}
 
-        .btn-submit:active {
-            transform: translateY(0);
-        }
+.btn-submit:hover, .btn-volver:hover {
+    background-color: #357bd9;
+    transform: translateY(-2px);
+}
         
         /* Estilos para la sección de detalles/mensajes */
         .detalle-item {

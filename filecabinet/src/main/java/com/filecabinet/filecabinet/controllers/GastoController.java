@@ -2,8 +2,10 @@ package com.filecabinet.filecabinet.controllers;
 
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import com.filecabinet.filecabinet.config.CustomUserDetails;
 import com.filecabinet.filecabinet.dto.GastoDto;
 import com.filecabinet.filecabinet.service.GastoService;
 
@@ -32,9 +34,12 @@ public class GastoController {
     }
 
     @PostMapping
-    public ResponseEntity<GastoDto> createGasto(@RequestBody GastoDto gastoDto) {
-        GastoDto newGasto = gastosService.createGasto(gastoDto);
-        return ResponseEntity.ok(newGasto);
+    public ResponseEntity<GastoDto> createGasto(
+        @RequestBody GastoDto gastoDto, 
+        @AuthenticationPrincipal CustomUserDetails userDetails) {
+            Long userId = userDetails.getUserId();
+            GastoDto newGasto = gastosService.createGasto(gastoDto, userId);
+            return ResponseEntity.ok(newGasto);
     }
 
     @PutMapping("/{id}")

@@ -1,93 +1,71 @@
+/* --- ESTILOS GENERALES Y FUENTES --- */
 body {
-            /* Usando Inter como fuente principal */
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            margin: 0;
-            padding: 40px;
-            background-color: #eef2f5;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start; /* Alineación arriba para que no se pegue al pie en móviles */
-            min-height: 100vh;
-        }
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7f6; /* Fondo gris claro suave */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
 
-        .container {
-            width: 100%;
-            max-width: 400px; /* Reduje un poco el ancho para un formulario de login más estándar */
-            background: #ffffff;
-            padding: 30px 40px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            border: 1px solid #e0e6ed;
-            margin-top: 5vh; /* Pequeño margen superior para centrado visual */
-        }
+/* --- ESTILO DEL CONTENEDOR PRINCIPAL --- */
+.container {
+    background-color: #ffffff; /* Fondo blanco para el contenedor */
+    padding: 40px 60px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Sombra elegante */
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+}
 
-        h2 {
-            text-align: center;
-            color: #2c3e50;
-            margin-bottom: 30px;
-            font-weight: 600;
-        }
+/* --- ESTILO DEL TÍTULO --- */
+.container h2 {
+    color: #2c3e50; /* Azul oscuro */
+    margin-bottom: 30px;
+    font-size: 1.8em;
+    border-bottom: 2px solid #3498db; /* Línea de color azul debajo del título */
+    padding-bottom: 10px;
+}
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+/* --- ESTILO DEL GRUPO DE NAVEGACIÓN (BOTONES) --- */
+.nav-group {
+    display: flex;
+    flex-direction: column; /* Apilar los enlaces verticalmente */
+    gap: 15px; /* Espacio entre los botones */
+    margin-top: 20px;
+}
 
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #555;
-            font-weight: 500;
-            font-size: 0.95rem;
-        }
+/* --- ESTILO DE LOS BOTONES DE NAVEGACIÓN --- */
+.btn-submit {
+    display: block; /* Asegura que ocupen todo el ancho disponible */
+    padding: 15px 20px;
+    text-decoration: none; /* Quitar el subrayado de los enlaces */
+    color: #ffffff; /* Texto blanco */
+    background-color: #3498db; /* Azul primario */
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
-        /* Estilos específicos para los campos de entrada (input) */
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #cbd5e0;
-            border-radius: 8px;
-            box-sizing: border-box;
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
+/* Efecto hover general para los botones */
+.btn-submit:hover {
+    background-color: #2980b9; /* Azul más oscuro al pasar el mouse */
+    transform: translateY(-2px); /* Pequeño levantamiento */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
 
-        .form-group input:focus {
-            border-color: #4a90e2;
-            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
-            outline: none;
-        }
-        
-        .btn-submit {
-            width: 100%;
-            padding: 14px;
-            background-color: #4a90e2;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            letter-spacing: 0.5px;
-            transition: background-color 0.3s, transform 0.2s;
-            margin-top: 10px;
-        }
+/* --- ESTILO ESPECÍFICO PARA EL BOTÓN DE CERRAR SESIÓN --- */
+#salir {
+    background-color: #e74c3c; /* Rojo para el botón de salir */
+    margin-top: 25px; /* Más espacio para separarlo de los demás */
+}
 
-        .btn-submit:hover {
-            background-color: #357bd9;
-            transform: translateY(-2px);
-        }
-
-        .btn-submit:active {
-            transform: translateY(0);
-        }
-        
-        /* Ajuste para móviles */
-        @media (max-width: 600px) {
-            body {
-                padding: 20px;
-                align-items: flex-start;
-            }
-            .container {
-                padding: 25px 20px;
-                margin-top: 5vh;
-            }
-        }
+#salir:hover {
+    background-color: #c0392b; /* Rojo más oscuro al pasar el mouse */
+}

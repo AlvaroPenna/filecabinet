@@ -5,8 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Getter
+@Table(name = "gastos")
 @Setter
+@Getter
 public class Gasto extends DocumentoComercial {
 
     @Column(unique = true)
@@ -14,6 +15,4 @@ public class Gasto extends DocumentoComercial {
 
     private String proveedor;
     
-    @Column(nullable = true)
-    private String obra;
 }

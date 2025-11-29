@@ -8,5 +8,6 @@ import com.filecabinet.filecabinet.entidades.Cliente;
 
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Long>{
+
     
 }

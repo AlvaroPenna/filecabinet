@@ -1,8 +1,13 @@
 package com.filecabinet.filecabinet.service;
 
 import com.filecabinet.filecabinet.dto.GastoDto;
+import com.filecabinet.filecabinet.entidades.Cliente;
 import com.filecabinet.filecabinet.entidades.Gasto;
+import com.filecabinet.filecabinet.entidades.Usuario;
+import com.filecabinet.filecabinet.repository.ClienteRepository;
 import com.filecabinet.filecabinet.repository.GastoRepository;
+import com.filecabinet.filecabinet.repository.UsuarioRepository;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,9 +19,14 @@ import java.util.stream.Collectors;
 public class GastoService {
 
     private final GastoRepository gastosRepository;
+    private final ClienteRepository clienteRepository;
+    private final UsuarioRepository usuarioRepository;
 
-    public GastoService(GastoRepository gastosRepository) {
+    public GastoService(GastoRepository gastosRepository,ClienteRepository clienteRepository,
+            UsuarioRepository usuarioRepository) {
         this.gastosRepository = gastosRepository;
+        this.clienteRepository = clienteRepository;
+        this.usuarioRepository = usuarioRepository;
     }
 
     @Transactional(readOnly = true)
@@ -32,8 +42,12 @@ public class GastoService {
     }
 
     @Transactional
-    public GastoDto createGasto(GastoDto gastoDto) {
+    public GastoDto createGasto(GastoDto gastoDto, Long userId) {
         Gasto gasto = toEntity(gastoDto);
+        if(userId != null){
+            Usuario usuario = usuarioRepository.findById(userId).orElse(null);
+            gasto.setUsuario(usuario);
+        }
         Gasto savedGasto = gastosRepository.save(gasto);
         return toDto(savedGasto);
     }
@@ -47,7 +61,6 @@ public class GastoService {
             gasto.setTotal_iva(gastoDetails.getTotal_iva());
             gasto.setTotal_con_iva(gastoDetails.getTotal_con_iva());
             gasto.setProveedor(gastoDetails.getProveedor());
-            gasto.setObra(gastoDetails.getObra());
             return toDto(gastosRepository.save(gasto));
         });
     }
@@ -70,7 +83,11 @@ public class GastoService {
         entity.setTotal_iva(dto.getTotal_iva());
         entity.setTotal_con_iva(dto.getTotal_con_iva());
         entity.setProveedor(dto.getProveedor());
-        entity.setObra(dto.getObra());
+        if(dto.getCliente_id() != null){
+            Cliente cliente = clienteRepository.findById(dto.getCliente_id())
+                                .orElse(null);
+            entity.setCliente(cliente); 
+        }
         return entity;
     }
 
@@ -82,7 +99,6 @@ public class GastoService {
         dto.setTotal_iva(entity.getTotal_iva());
         dto.setTotal_con_iva(entity.getTotal_con_iva());
         dto.setProveedor(entity.getProveedor());
-        dto.setObra(entity.getObra());
         return dto;
     }
 }

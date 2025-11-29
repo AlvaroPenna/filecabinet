@@ -17,6 +17,15 @@ public abstract class DocumentoComercial {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Date fechaEmision;
+    private BigDecimal total_sin_iva;
+    private BigDecimal total_iva;
+    private BigDecimal total_con_iva;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "obra_id")
+    private Proyecto proyecto;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id", nullable = true)
     protected Usuario usuario;
@@ -24,10 +33,5 @@ public abstract class DocumentoComercial {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cliente_id", nullable = true)
     protected Cliente cliente;
-
-    private Date fechaEmision;
-    private BigDecimal total_sin_iva;
-    private BigDecimal total_iva;
-    private BigDecimal total_con_iva;
 
 }

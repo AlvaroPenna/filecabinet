@@ -64,32 +64,4 @@ public class PresupuestoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/{presupuestoId}/detalles/{detalleId}")
-    public ResponseEntity<PresupuestoDto> updateDetalle(
-            @PathVariable Long presupuestoId,
-            @PathVariable Long detalleId,
-            @Valid @RequestBody DetalleDocumentoDto detalleDto) {
-        
-        try {
-            return presupuestoService.updateDetalle(presupuestoId, detalleId, detalleDto)
-                    .map(ResponseEntity::ok)
-                    .orElse(ResponseEntity.notFound().build());
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-     @DeleteMapping("/{presupuestoId}/detalles/{detalleId}")
-     public ResponseEntity<Void> deleteDetalle(
-             @PathVariable Long presupuestoId,
-             @PathVariable Long detalleId) {
-
-         boolean deleted = presupuestoService.deleteDetalle(presupuestoId, detalleId);
-
-         if (deleted) {
-             return ResponseEntity.noContent().build();
-         } else {
-             return ResponseEntity.notFound().build();
-         }
-     }
 }

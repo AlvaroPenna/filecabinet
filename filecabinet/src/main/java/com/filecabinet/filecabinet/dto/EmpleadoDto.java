@@ -1,20 +1,20 @@
 package com.filecabinet.filecabinet.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClienteDto {
+public class EmpleadoDto {
 
     private Long id;
     private String nombre;
     private String apellidos;
-    private String cifNif;
-    private String email;
+    private String nif;
     private String telefono;
+    private String email;
     private String direccion;
     private String ciudad;
     private String codigoPostal;
