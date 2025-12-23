@@ -1,0 +1,6 @@
+INSERT INTO filecabinet.usuarios
+(activo, fecha_registro, id, apellidos, codigo_postal, domicilio, email, nombre, password_hash, poblacion, provincia, telefono, rol)
+VALUES(1, '2025-11-05 00:00:00', 3, '', '28031', 'C/Camino de los talleres 14 1b', 'reformasantoniop@gmail.com', 'reformas antonio', '$2a$10$/w/mfnaOwlPWUbhwysCjlef9rMV6nu2sgfBo.Mx5PItKsSuPlWReW', 'Madrid', 'Madrid', '696810533', 'Administrador');
+
+INSERT INTO filecabinet.usuarios(activo, fecha_registro, apellidos, codigo_postal, domicilio, email, nombre, password_hash, poblacion, provincia, telefono, rol)
+VALUES(1, '2025-11-05 00:00:00', 'Peña Romero', '28031', 'C/Camino de los talleres 14 1b', 'theminipepi@gmail.com', 'Álvaro', '$2a$10$/w/mfnaOwlPWUbhwysCjlef9rMV6nu2sgfBo.Mx5PItKsSuPlWReW', 'Madrid', 'Madrid', '696810533', 'Administrador');
