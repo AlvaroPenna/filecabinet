@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/gastos_form.css">
+    <title>Gestión de Gastos</title>
+</head>
+<body>
+
+<div class="container">
+    <h2>Agregar Nuevo Gasto</h2>
+    <form id="gasto-form">
+        <div class="form-group">
+            <label for="proveedor">Proveedor:</label>
+            <input type="text" id="proveedor" name="proveedor" required>
+        </div>
+        <div class="form-group">
+            <label for="fechaEmision">Fecha de Emisión:</label>
+            <input type="date" id="fechaEmision" name="fechaEmision" required>
+        </div>
+        <div class="form-group">
+            <label for="numero">Número de Factura/Gasto:</label>
+            <input type="text" id="numero" name="numero">
+        </div>
+        <div class="form-group">
+            <label for="cliente">Cliente:</label>
+            <select id="cliente" name="cliente"></select>
+        </div>
+        <div class="form-group">
+            <label for="obra">Obra:</label>
+            <input type="text" id="obra" name="obra">
+        </div>
+        <div class="form-group">
+            <label for="importe_sin_iva">Importe Sin Iva:</label>
+            <input type="number" id="importe_sin_iva" name="importe_sin_iva" step="0.01" required>
+        </div>
+        <div class="form-group">
+            <label>Tipo de IVA:</label>
+            <div class="radio-group">
+                <label for="iva_21">
+                    <input type="radio" id="iva_21" name="tipo_iva" value="21" checked> 21%
+                </label>
+                <label for="iva_10">
+                    <input type="radio" id="iva_10" name="tipo_iva" value="10"> 10%
+                </label>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="btn-submit">Guardar Gasto</button>
+            <button type="button" class="btn-volver" onclick="volverAlIndex()">Volver al Index</button>
+        </div>
+    </form>
+</div>
+<script src="/js/gastos.js"></script>
+</body>
+</html>
