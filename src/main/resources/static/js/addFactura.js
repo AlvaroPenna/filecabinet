@@ -23,17 +23,24 @@ function calculateDetailTotal(itemRow) {
  * Suma todos los subtotales para obtener el total bruto
  */
 function calculateGrandTotal() {
-    let grandTotal = 0.00;
+    let sumaProductos = 0.00;
     document.querySelectorAll('.detalle-item').forEach(item => {
         const subtotalInput = item.querySelector('[name*="detalle-subtotal"]');
         if (subtotalInput) {
-            grandTotal += parseFloat(subtotalInput.value) || 0.00;
+            sumaProductos += parseFloat(subtotalInput.value) || 0.00;
         }
     });
 
+    const inputDescuento = document.getElementById('descuento');
+    const porcentaje = parseFloat(inputDescuento?.value) || 0;
+
+    // 3. Calcular el valor final: Suma - (Suma * Porcentaje / 100)
+    const montoDescuento = sumaProductos * (porcentaje / 100);
+    const totalConDescuento = sumaProductos - montoDescuento;
+
     const totalInput = document.getElementById('total_bruto');
     if (totalInput) {
-        totalInput.value = grandTotal.toFixed(2);
+        totalInput.value = totalConDescuento.toFixed(2);
     }
 }
 
@@ -105,6 +112,7 @@ if (facturaForm) {
             const descripcion = item.querySelector('[name*="detalle-descripcion"]')?.value;
             const cantidad = parseFloat(item.querySelector('[name*="detalle-cantidad"]')?.value) || 0;
             const precio = parseFloat(item.querySelector('[name*="detalle-precioUnitario"]')?.value) || 0;
+            const subtotal = parseFloat(item.querySelector('[name*="detalle-subtotal"]')?.value) || 0;
 
             if (descripcion && descripcion.trim() !== "") {
                 detalles.push({
@@ -112,13 +120,14 @@ if (facturaForm) {
                     descripcion: descripcion,
                     cantidad: cantidad,
                     precioUnitario: precio,
-                    subtotal: subtotal
+                    subTotal: subtotal
                 });
             }
         });
 
         // 2. Calcular impuestos para el JSON
         const totalBruto = parseFloat(document.getElementById('total_bruto').value) || 0.00;
+        const descuento = (parseFloat(document.getElementById('descuento').value) / 100) * totalBruto;
         const tipoIvaRadio = document.querySelector('input[name="tipo_iva"]:checked');
         const porcentajeIva = tipoIvaRadio ? parseFloat(tipoIvaRadio.value) : 21.00;
         const totalIva = totalBruto * (porcentajeIva / 100);
@@ -131,7 +140,7 @@ if (facturaForm) {
             total_bruto: totalBruto,
             total_iva: totalIva,
             total_neto: totalNeto,
-            descuento: document.getElementById('descuento').value,
+            descuento: descuento,
             cliente_id: parseInt(document.getElementById('cliente').value) || null,
             proyecto_id: parseInt(document.getElementById('proyecto').value) || null,
             detalles: detalles
