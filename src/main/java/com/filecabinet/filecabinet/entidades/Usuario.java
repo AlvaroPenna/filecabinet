@@ -1,27 +1,29 @@
 package com.filecabinet.filecabinet.entidades;
 
 import jakarta.persistence.*;
-import lombok.Data;
-//import lombok.EqualsAndHashCode;
-//import lombok.ToString;
-
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-
+import lombok.Getter;
+import lombok.Setter;
 import com.filecabinet.filecabinet.enums.Rol;
 
+import java.time.LocalDateTime; // Usar esto en lugar de Date
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+
 @Entity
-@Data
+@Getter @Setter // IMPORTANTE: Getter y Setter separados
 @Table(name = "usuarios")
 public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String nombre;
+    
     @Column(nullable = true)
     private String apellidos;
+    
     private String telefono;
     private String email;
     private String domicilio;
@@ -29,9 +31,12 @@ public class Usuario {
     private String provincia;
     private String poblacion;
     private String passwordHash;
-    @Column(nullable = true)
-    private Date fechaRegistro;
+
+    @Column(name = "fecha_registro")
+    private LocalDateTime fechaRegistro; // Moderno y seguro
+
     private boolean activo;
+
     @Enumerated(EnumType.STRING)
     private Rol rol;
 
@@ -41,11 +46,23 @@ public class Usuario {
         joinColumns = @JoinColumn(name = "usuario_id"),
         inverseJoinColumns = @JoinColumn(name = "cliente_id")
     )
-    //@ToString.Exclude
-    //@EqualsAndHashCode.Exclude
+    // Inicializado para evitar NullPointer
     private Set<Cliente> clientes = new HashSet<>();
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Empleado> trabajadores;
+    private Set<Empleado> trabajadores = new HashSet<>();
 
+    // --- ESTABILIDAD DEL SET ---
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Usuario usuario = (Usuario) o;
+        return id != null && Objects.equals(id, usuario.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

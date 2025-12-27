@@ -6,8 +6,10 @@ import com.filecabinet.filecabinet.entidades.Usuario;
 import com.filecabinet.filecabinet.repository.ClienteRepository;
 import com.filecabinet.filecabinet.repository.UsuarioRepository;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,33 +39,40 @@ public class ClienteService {
     }
 */
 
-    @Transactional
-    public ClienteDto createCliente(ClienteDto clienteDto, Long userId) {
+@Transactional
+public ClienteDto createCliente(ClienteDto clienteDto, Long userId) {
 
-        Usuario usuario = usuarioRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        String numCif = clienteDto.getCif();
-        String email = clienteDto.getEmail();
-        Cliente clienteParaVincular;
-        Optional<Cliente> clientePorCif = clienteRepository.findByCif(numCif);
-        Optional<Cliente> clientePorEmail = clienteRepository.findByEmail(email);
-        if (clientePorCif.isPresent()) {
-            clienteParaVincular = clientePorCif.get();
+    // 1. Recuperar Usuario (Necesario para la relación)
+    Usuario usuario = usuarioRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        } else if (clientePorEmail.isPresent()) {
-            clienteParaVincular = clientePorEmail.get();
+    // 2. Buscar si el cliente YA existe (por CIF o Email)
+    // Asumiendo que tus repos devuelven Optional, usamos .orElse(null) para facilitar la lógica
+    Cliente clienteParaVincular = clienteRepository.findByCif(clienteDto.getCif())
+            .orElse(clienteRepository.findByEmail(clienteDto.getEmail())
+            .orElse(null));
 
-        } else {
-            clienteParaVincular = toEntity(clienteDto);
-            clienteParaVincular = clienteRepository.save(clienteParaVincular);
-        }
-        boolean esNuevaRelacion = usuario.getClientes().add(clienteParaVincular);
+    // 3. Lógica de "Crear o Reutilizar"
+    if (clienteParaVincular == null) {
+        // NO existe -> Lo creamos y guardamos primero
+        clienteParaVincular = toEntity(clienteDto);
+        clienteParaVincular = clienteRepository.save(clienteParaVincular);
+    } 
+    // Si ya existía (else), simplemente usamos la variable 'clienteParaVincular' que ya recuperamos
 
-        if (esNuevaRelacion) {
-            usuarioRepository.save(usuario);
-        }
-        return toDto(clienteParaVincular);
+    // 4. CREAR LA RELACIÓN (Lo que faltaba en tu código)
+    // Esto inserta la fila en 'rel_cliente_usuario'
+    boolean nuevaRelacion = usuario.getClientes().add(clienteParaVincular);
+    
+    // Opcional: Validar si ya lo tenía asignado
+    if (!nuevaRelacion) {
+        throw new ResponseStatusException(HttpStatus.CONFLICT, "Este cliente ya está asociado a tu usuario.");
     }
+
+    usuarioRepository.save(usuario); // Guarda la relación
+
+    return toDto(clienteParaVincular);
+}
 
     @Transactional
     public Optional<ClienteDto> updateCliente(Long id, ClienteDto clienteDto, Long userId) {

@@ -141,7 +141,7 @@ if (facturaForm) {
             total_iva: totalIva,
             total_neto: totalNeto,
             descuento: descuento,
-            cliente_id: parseInt(document.getElementById('cliente').value) || null,
+            cliente_id: parseInt(document.getElementById('cliente_id').value) || null,
             proyecto_id: parseInt(document.getElementById('proyecto').value) || null,
             detalles: detalles
         };
@@ -181,6 +181,52 @@ if (facturaForm) {
     });
 }
 
+function cargarUltimoNumFactura() {
+    fetch('http://localhost:8080/api/facturas', {
+        method: 'GET',
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Error al obtener facturas');
+        return response.json();
+    })
+    .then(facturas => {
+        // 1. Obtener los últimos dos dígitos del año actual (ej: 2025 -> "25")
+        const anioActual = new Date().getFullYear().toString().slice(-2);
+        const prefijo = `FRP${anioActual}-`;
+        
+        let siguienteSecuencia = 1;
+
+        if (facturas && facturas.length > 0) {
+            // 2. Filtrar solo las facturas del año actual y extraer su número correlativo
+            const numerosDelAnio = facturas
+                .filter(f => f.numFactura && f.numFactura.startsWith(prefijo))
+                .map(f => {
+                    // Extraer la parte numérica después del guion (ej: "FRP25-0005" -> "0005")
+                    const partes = f.numFactura.split('-');
+                    return parseInt(partes[1]) || 0;
+                });
+
+            // 3. Si hay facturas de este año, buscar la mayor y sumar 1
+            if (numerosDelAnio.length > 0) {
+                siguienteSecuencia = Math.max(...numerosDelAnio) + 1;
+            }
+        }
+
+        // 4. Formatear con ceros a la izquierda (ej: 1 -> "0001")
+        const secuenciaFormateada = siguienteSecuencia.toString().padStart(4, '0');
+        const nuevoNumFactura = `${prefijo}${secuenciaFormateada}`;
+
+        // 5. Asignar al input
+        const inputNumero = document.getElementById('numero');
+        if (inputNumero) {
+            inputNumero.value = nuevoNumFactura;
+        }
+
+        console.log("Nuevo número de factura generado:", nuevoNumFactura);
+    })
+    .catch(error => console.error('Error:', error));
+}
+
 function cargarProyectos() {
     fetch('http://localhost:8080/api/proyectos', {
         method: 'GET',
@@ -201,7 +247,7 @@ function cargarProyectos() {
             proyectos.forEach(proyecto => {
                 const option = document.createElement('option');
                 option.value = proyecto.id;
-                option.textContent = proyecto.id + proyecto.nombre;
+                option.textContent = proyecto.nombre;
                 selectProyecto.appendChild(option);
             });
         })
@@ -213,35 +259,54 @@ function cargarProyectos() {
 }
 
 function cargarClientes() {
+    const inputVisible = document.getElementById('cliente');
+    const dataList = document.getElementById('lista-clientes');
+    const inputHiddenId = document.getElementById('cliente_id'); // Tu input oculto
+
     fetch('http://localhost:8080/api/clientes')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Error al obtener la lista de clientes');
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(clientes => {
-            const selectCliente = document.getElementById('cliente');
-            selectCliente.innerHTML = '';
-            const defaultOption = document.createElement('option');
-            defaultOption.value = '';
-            defaultOption.textContent = 'Seleccione un cliente (opcional)';
-            selectCliente.appendChild(defaultOption);
+            // 1. Limpiamos el datalist
+            dataList.innerHTML = '';
+
+            // 2. Llenamos el datalist
             clientes.forEach(cliente => {
                 const option = document.createElement('option');
-                option.value = cliente.id;
-                option.textContent = cliente.cif + "-" + cliente.nombre + " " + cliente.apellidos;
-                selectCliente.appendChild(option);
+                // IMPORTANTE: Definir el formato exacto del nombre
+                option.value = `${cliente.nombre} ${cliente.apellidos}`; 
+                dataList.appendChild(option);
+            });
+
+            // 3. Agregamos el evento "escucha" AQUÍ MISMO.
+            // Al estar dentro del .then, este evento puede "ver" la variable 'clientes'
+            inputVisible.addEventListener('input', function() {
+                const valorActual = this.value;
+
+                // Buscamos en el array 'clientes' alguien con ese mismo nombre
+                const clienteEncontrado = clientes.find(c => 
+                    `${c.nombre} ${c.apellidos}` === valorActual
+                );
+
+                if (clienteEncontrado) {
+                    // Si coincide, metemos el ID en el input oculto
+                    inputHiddenId.value = clienteEncontrado.id;
+                    console.log("ID asignado:", clienteEncontrado.id);
+                } else {
+                    // Si el usuario borra o escribe un nombre que no existe, limpiamos el ID
+                    inputHiddenId.value = '';
+                }
             });
         })
-        .catch(error => {
-            console.error('Error al cargar clientes:', error);
-        });
+        .catch(error => console.error('Error cargando clientes:', error));
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     cargarProyectos();
     cargarClientes();
+    cargarUltimoNumFactura();
+
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('fechaEmision').value = today;
 
     const primeraFila = document.querySelector('.detalle-item');
     if (primeraFila) addCalculationListeners(primeraFila);

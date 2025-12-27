@@ -1,5 +1,6 @@
 package com.filecabinet.filecabinet.entidades;
 
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 import lombok.Data;
 
