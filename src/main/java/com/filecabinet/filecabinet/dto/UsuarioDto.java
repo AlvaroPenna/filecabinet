@@ -23,6 +23,7 @@ public class UsuarioDto {
     private String apellidos;
 
     private String telefono;
+    private String cif;
 
     @NotBlank(message = "El email es obligatorio")
     @Email(message = "El formato del email no es válido")

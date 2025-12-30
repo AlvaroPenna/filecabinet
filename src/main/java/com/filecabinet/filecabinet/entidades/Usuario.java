@@ -23,6 +23,7 @@ public class Usuario {
     
     @Column(nullable = true)
     private String apellidos;
+    private String cif;
     
     private String telefono;
     private String email;

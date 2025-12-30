@@ -88,6 +88,7 @@ public class UsuarioService {
         entity.setNombre(dto.getNombre());
         entity.setApellidos(dto.getApellidos());
         entity.setTelefono(dto.getTelefono());
+        entity.setCif(dto.getCif());
         entity.setEmail(dto.getEmail());
         entity.setDomicilio(dto.getDomicilio());
         entity.setCodigoPostal(dto.getCodigoPostal());
@@ -117,6 +118,7 @@ public class UsuarioService {
         dto.setNombre(usuario.getNombre());
         dto.setApellidos(usuario.getApellidos());
         dto.setTelefono(usuario.getTelefono());
+        dto.setCif(usuario.getCif());
         dto.setEmail(usuario.getEmail());
         dto.setDomicilio(usuario.getDomicilio());
         dto.setCodigoPostal(usuario.getCodigoPostal());
