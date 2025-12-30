@@ -140,9 +140,10 @@ if (facturaForm) {
             total_bruto: totalBruto,
             total_iva: totalIva,
             total_neto: totalNeto,
+            tipo_iva: porcentajeIva,
             descuento: descuento,
             cliente_id: parseInt(document.getElementById('cliente_id').value) || null,
-            proyecto_id: parseInt(document.getElementById('proyecto').value) || null,
+            proyecto_id: parseInt(document.getElementById('proyecto_id').value) || null,
             detalles: detalles
         };
 
@@ -221,41 +222,37 @@ function cargarUltimoNumFactura() {
         if (inputNumero) {
             inputNumero.value = nuevoNumFactura;
         }
-
-        console.log("Nuevo número de factura generado:", nuevoNumFactura);
     })
     .catch(error => console.error('Error:', error));
 }
 
 function cargarProyectos() {
-    fetch('http://localhost:8080/api/proyectos', {
-        method: 'GET',
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Error al obtener la lista de trabajadores: ' + response.statusText);
-            }
-            return response.json();
-        })
-        .then(proyectos => {
-            const selectProyecto = document.getElementById('proyecto');
-            selectProyecto.innerHTML = '';
-            const defaultOption = document.createElement('option');
-            defaultOption.value = '';
-            defaultOption.textContent = 'Selecciona un proyecto...';
-            selectProyecto.appendChild(defaultOption);
-            proyectos.forEach(proyecto => {
-                const option = document.createElement('option');
-                option.value = proyecto.id;
-                option.textContent = proyecto.nombre;
-                selectProyecto.appendChild(option);
+    const inputVisibleProyecto = document.getElementById('proyecto');
+    const datalistProyecto = document.getElementById('lista-proyectos');
+    const inputHiddenIdProyecto = document.getElementById('proyecto_id');
+    fetch('http://localhost:8080/api/proyectos')
+        .then(response => response.json())
+        .then(proyectos =>{
+            datalistProyecto.innerHTML = '';
+            proyectos.forEach(proyecto =>{
+                const opcion = document.createElement('option');
+                opcion.value = `${proyecto.nombre}`;
+                datalistProyecto.appendChild(opcion);
             });
-        })
-        .catch(error => {
-            console.error('Error al cargar proyectos:', error);
-            const selectTrabajador = document.getElementById('proyecto');
-            selectTrabajador.innerHTML = `<option value="">Error al cargar (Ver consola)</option>`;
+        inputVisibleProyecto.addEventListener('input', function(){
+            const valorActual = this.value;
+            const proyectoEncontrado = proyectos.find(c =>
+                 `${c.nombre}` === valorActual
+            );
+            if(proyectoEncontrado){
+                inputHiddenIdProyecto.value = proyectoEncontrado.id;
+            }else{
+                inputHiddenIdProyecto.value = '';
+            }
         });
+    })
+    .catch(error => console.error('Error cargando proyectos:', error));
+        
 }
 
 function cargarClientes() {
@@ -290,7 +287,6 @@ function cargarClientes() {
                 if (clienteEncontrado) {
                     // Si coincide, metemos el ID en el input oculto
                     inputHiddenId.value = clienteEncontrado.id;
-                    console.log("ID asignado:", clienteEncontrado.id);
                 } else {
                     // Si el usuario borra o escribe un nombre que no existe, limpiamos el ID
                     inputHiddenId.value = '';

@@ -82,7 +82,7 @@ function addDetailRow() {
     addCalculationListeners(clone);
 }
 
-const facturaForm = document.getElementById('presupuestoForm');
+const presupuestoForm = document.getElementById('presupuestoForm');
 if (presupuestoForm) {
     presupuestoForm.addEventListener('submit', function (event) {
         event.preventDefault();
@@ -122,6 +122,7 @@ if (presupuestoForm) {
             total_bruto: totalBruto,
             total_iva: totalIva,
             total_neto: totalNeto,
+            tipo_iva: porcentajeIva,
             cliente_id: parseInt(document.getElementById('cliente').value) || null,
             proyecto_id: parseInt(document.getElementById('proyecto').value) || null,
             detalles: detalles

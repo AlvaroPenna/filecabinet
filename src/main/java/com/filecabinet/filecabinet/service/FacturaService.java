@@ -132,6 +132,7 @@ public class FacturaService {
         entity.setTotal_bruto(dto.getTotal_bruto());
         entity.setTotal_iva(dto.getTotal_iva());
         entity.setTotal_neto(dto.getTotal_neto());
+        entity.setTipo_iva(dto.getTipo_iva());
         if(dto.getCliente_id() != null){
             Cliente cliente = clienteRepository.findById(dto.getCliente_id())
                                             .orElse(null);
@@ -155,6 +156,7 @@ public class FacturaService {
         dto.setTotal_bruto(entity.getTotal_bruto()); 
         dto.setTotal_iva(entity.getTotal_iva());
         dto.setTotal_neto(entity.getTotal_neto());
+        dto.setTipo_iva(entity.getTipo_iva());
 
         if (entity.getCliente() != null) {
             dto.setCliente_id(entity.getCliente().getId());

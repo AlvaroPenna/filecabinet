@@ -22,6 +22,7 @@ public abstract class DocumentoComercial {
     private BigDecimal total_bruto;
     private BigDecimal total_iva;
     private BigDecimal total_neto;
+    private Integer tipo_iva;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "proyecto_id")

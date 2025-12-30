@@ -384,12 +384,12 @@ public class FacturaExcelExporter {
 
         // Base Imponible
         createCell(rowPago, 2, "BASE IMPONIBLE:", styleTotalLabel);
-        createCell(rowPago, 3, getSafeDouble(factura.getTotal_bruto()), styleCurrency);
+        createCell(rowPago, 3, getSafeDouble(factura.getTotal_bruto()), styleCurrencyCenter);
 
         // IVA
         Row rowIva = getOrCreateRow(rowCount + 1);
-        createCell(rowIva, 2, "I.V.A. (21%):", styleTotalLabel);
-        createCell(rowIva, 3, getSafeDouble(factura.getTotal_iva()), styleCurrency);
+        createCell(rowIva, 2, "I.V.A. " + factura.getTipo_iva() + "%:", styleTotalLabel);
+        createCell(rowIva, 3, getSafeDouble(factura.getTotal_iva()), styleCurrencyCenter);
 
         // Total Final
         Row rowTotal = getOrCreateRow(rowCount + 2);

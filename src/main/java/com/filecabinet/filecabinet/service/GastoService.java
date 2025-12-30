@@ -3,9 +3,11 @@ package com.filecabinet.filecabinet.service;
 import com.filecabinet.filecabinet.dto.GastoDto;
 import com.filecabinet.filecabinet.entidades.Cliente;
 import com.filecabinet.filecabinet.entidades.Gasto;
+import com.filecabinet.filecabinet.entidades.Proyecto;
 import com.filecabinet.filecabinet.entidades.Usuario;
 import com.filecabinet.filecabinet.repository.ClienteRepository;
 import com.filecabinet.filecabinet.repository.GastoRepository;
+import com.filecabinet.filecabinet.repository.ProyectoRepository;
 import com.filecabinet.filecabinet.repository.UsuarioRepository;
 
 import org.springframework.stereotype.Service;
@@ -21,12 +23,14 @@ public class GastoService {
     private final GastoRepository gastosRepository;
     private final ClienteRepository clienteRepository;
     private final UsuarioRepository usuarioRepository;
+    private final ProyectoRepository proyectoRepository;
 
     public GastoService(GastoRepository gastosRepository,ClienteRepository clienteRepository,
-            UsuarioRepository usuarioRepository) {
+            UsuarioRepository usuarioRepository, ProyectoRepository proyectoRepository) {
         this.gastosRepository = gastosRepository;
         this.clienteRepository = clienteRepository;
         this.usuarioRepository = usuarioRepository;
+        this.proyectoRepository = proyectoRepository;
     }
 
     @Transactional(readOnly = true)
@@ -89,10 +93,16 @@ public class GastoService {
         entity.setTotal_iva(dto.getTotal_iva());
         entity.setTotal_neto(dto.getTotal_neto());
         entity.setProveedor(dto.getProveedor());
+        entity.setTipo_iva(dto.getTipo_iva());
         if(dto.getCliente_id() != null){
             Cliente cliente = clienteRepository.findById(dto.getCliente_id())
                                 .orElse(null);
             entity.setCliente(cliente); 
+        }
+        if (dto.getProyecto_id() != null) {
+            Proyecto proyecto = proyectoRepository.findById(dto.getProyecto_id())
+                                            .orElse(null);
+            entity.setProyecto(proyecto);
         }
         return entity;
     }
@@ -105,6 +115,14 @@ public class GastoService {
         dto.setTotal_iva(entity.getTotal_iva());
         dto.setTotal_neto(entity.getTotal_neto());
         dto.setProveedor(entity.getProveedor());
+        dto.setTipo_iva(entity.getTipo_iva());
+        if (entity.getCliente() != null) {
+            dto.setCliente_id(entity.getCliente().getId());
+        }
+        
+        if (entity.getProyecto() != null) {
+            dto.setProyecto_id(entity.getProyecto().getId());
+        }
         return dto;
     }
 }

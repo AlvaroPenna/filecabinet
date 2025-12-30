@@ -12,15 +12,15 @@
     <form id="horas-form">
         <div class="form-group">
             <label for="trabajador">Trabajador:</label>
-            <select id="trabajador" name="trabajador" required>
-                <option value="">Selecciona un trabajador...</option>
-            </select>
+            <input type="text" id="trabajador" name="trabajador" list="lista-trabajadores" placeholder="Busca un trabajador..." required autocomplete="off">
+            <input type="hidden" id="trabajador_id" name="trabajador_id">
+            <datalist id="lista-trabajadores"></datalist>
         </div>
         <div class="form-group">
-            <label for="obra">Obra / Proyecto</label>
-            <select id="obra" name="obra" required>
-                <option value="">Selecciona una obra...</option>
-            </select>
+            <label for="proyecto">Proyecto:</label>
+            <input type="text" id="proyecto" name="proyecto" list="lista-proyectos" placeholder="Busca un proyecto..." required autocomplete="off">
+            <input type="hidden" id="proyecto_id" name="proyecto_id">
+            <datalist id="lista-proyectos"></datalist>
         </div>
         <div class="form-group">
             <label for="dia">Día (Fecha)</label>
